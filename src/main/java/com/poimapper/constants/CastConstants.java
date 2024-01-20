@@ -1,6 +1,5 @@
-package com.poimapper.config;
+package com.poimapper.constants;
 
-import java.time.format.DateTimeFormatter;
 
 public class CastConstants {
     public static final String DATE_PATTERN = "yyyy-MM-dd";
