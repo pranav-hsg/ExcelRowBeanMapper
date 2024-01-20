@@ -19,10 +19,10 @@ public class ExcelRowBeanMapper {
     }
     private ExcelRowBeanMapper(Builder builder){
         rowMapping = builder.options.getRowMappingOptions();
-        customStringCastingFunc = builder.options.getCustomCastingFunc();
+        customStringCastingFunc = builder.options.getCustomCastingFunc()!= null ?builder.options.getCustomCastingFunc() :  new DefaultCastString();
     }
     private  LinkedHashMap<String, Map<String,String>> rowMapping = null;
-    private  CastString customStringCastingFunc = new DefaultCastString();
+    private  CastString customStringCastingFunc;
 
     private final DataFormatter dataFormatter = new DataFormatter();
     public  <T> T fromExcelRow(Row row, T dto)  {
@@ -45,15 +45,15 @@ public class ExcelRowBeanMapper {
         while (true){
             String curFieldMapName = fields.removeFirst();
             Field curField =  currentClassInstance.getClass().getDeclaredField(curFieldMapName);
-            Method setterMethod = ReflectionUtil.getSetterMethod(currentClassInstance.getClass(), curFieldMapName,curField.getType());
+            curField.setAccessible(true);
             if(fields.isEmpty()) {
-                setterMethod.invoke(currentClassInstance, customStringCastingFunc.apply(curField,cellValue,options) );
+                // For non nested Fields set the value by casting string to particular data type of the field
+                curField.set(currentClassInstance, customStringCastingFunc.apply(curField,cellValue,options) );
                 break;
             }
-            Method getterMethod = ReflectionUtil.getGetterMethod(currentClassInstance.getClass(), curFieldMapName);
-            Object getterValue = getterMethod.invoke(currentClassInstance);
+            Object getterValue = curField.get(currentClassInstance);
             Object nestedClassInstance = (getterValue == null) ?  curField.getType().getConstructor().newInstance() : getterValue;
-            setterMethod.invoke(currentClassInstance,nestedClassInstance);
+            curField.set(currentClassInstance,nestedClassInstance);
             currentClassInstance =  nestedClassInstance;
         }
     }
