@@ -58,19 +58,19 @@ public class ExcelRowBeanMapperTests {
     }
     private void setSecondRowMapping(){
         columnMap = new LinkedHashMap<>();
-        columnMap.put("accountBalance",Map.of("fieldMapping","amountBalance","defaultValue",new BigDecimal(3334444)));
-        columnMap.put("phoneNumber",Map.of("fieldMapping","phone"));
-        columnMap.put("birthDate",Map.of("fieldMapping","birthDate","pattern","dd/MM/yyyy"));
-        columnMap.put("gender",Map.of("fieldMapping","gender"));
-        columnMap.put("name",Map.of("fieldMapping","name"));
-        columnMap.put("heightInMeters",Map.of("fieldMapping","heightInMeters"));
-        columnMap.put("userType",Map.of("fieldMapping","userType"));
-        columnMap.put("isActive",Map.of("fieldMapping","isActive"));
-        columnMap.put("registrationTime",Map.of("fieldMapping","registrationTime","pattern","dd/yyyy/MM HH:mm:ss"));
-        columnMap.put("firstName",Map.of("fieldMapping","motherInfo:firstName"));
-        columnMap.put("lastName",Map.of("fieldMapping","motherInfo:lastName"));
-        columnMap.put("healthy",Map.of("fieldMapping","motherInfo:status:healthy"));
-        columnMap.put("note",Map.of("fieldMapping","motherInfo:status:note"));
+        columnMap.put("Account Balance",Map.of("fieldMapping","amountBalance","defaultValue",new BigDecimal(3334444)));
+        columnMap.put("Phone Number",Map.of("fieldMapping","phone"));
+        columnMap.put("BirthDate",Map.of("fieldMapping","birthDate","pattern","dd/MM/yyyy"));
+        columnMap.put("Gender",Map.of("fieldMapping","gender"));
+        columnMap.put("Name",Map.of("fieldMapping","name"));
+        columnMap.put("Height In Meters",Map.of("fieldMapping","heightInMeters"));
+        columnMap.put("User Type",Map.of("fieldMapping","userType"));
+        columnMap.put("Is Active",Map.of("fieldMapping","isActive"));
+        columnMap.put("Registration Time",Map.of("fieldMapping","registrationTime","pattern","dd/yyyy/MM HH:mm:ss"));
+        columnMap.put("First Name",Map.of("fieldMapping","motherInfo:firstName"));
+        columnMap.put("Last kName",Map.of("fieldMapping","motherInfo:lastName"));
+        columnMap.put("Healthy",Map.of("fieldMapping","motherInfo:status:healthy"));
+        columnMap.put("Note",Map.of("fieldMapping","motherInfo:status:note"));
     }
     @BeforeClass
     public static void setUp() {
