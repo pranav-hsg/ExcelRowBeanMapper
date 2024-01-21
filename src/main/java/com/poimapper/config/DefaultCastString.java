@@ -62,7 +62,8 @@ public class DefaultCastString implements  CastString{
             String message = ErrorMessageGenerationUtil.getErrorMessage(ErrorCodes.VALUE_CONVERSION_FAILED,field.getName(),value,fieldType);
             if((boolean)defaultOptions.getMapperSettings().getOrDefault("strictMode",false))
                 throw new CastException(message,e);
-            log.warn("Skipping field '"+field.getName()+"'\tFailed to cast value '"+value+"' from String type to '"+fieldType+"' "+e.getLocalizedMessage());
+            if(!(boolean)defaultOptions.getMapperSettings().getOrDefault("suppressWarnings",true))
+                log.warn("Skipping field '"+field.getName()+"'\tFailed to cast value '"+value+"' from String type to '"+fieldType+"' "+e.getLocalizedMessage());
         }
         return null;
     }

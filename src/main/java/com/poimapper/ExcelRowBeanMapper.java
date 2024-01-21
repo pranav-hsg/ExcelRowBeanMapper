@@ -45,7 +45,8 @@ public class ExcelRowBeanMapper {
             }catch (NoSuchFieldException | NoSuchMethodException | InvocationTargetException | IllegalAccessException | InstantiationException e) {
                 if((boolean)mapperSettings.getOrDefault("strictMode",false))
                     throw new ExcelRowBeanMapperException(ErrorMessageGenerationUtil.getErrorMessage(VALUE_HANDLE_EXCEPTION,fieldMapName), e);
-                log.warn(ErrorMessageGenerationUtil.getErrorMessage(VALUE_HANDLE_EXCEPTION,fieldMapName), e);
+                if(!(boolean)mapperSettings.getOrDefault("suppressWarnings",true))
+                    log.warn(ErrorMessageGenerationUtil.getErrorMessage(VALUE_HANDLE_EXCEPTION,fieldMapName), e);
             }
             i++;
         }
@@ -95,8 +96,6 @@ public class ExcelRowBeanMapper {
             return this;
         }
         public ExcelRowBeanMapper build() {
-            if((boolean)options.getMapperSettings().getOrDefault("suppressWarnings",true))
-                MDC.put("loggingEnabled",String.valueOf(false));
             if(options.getRowMappingOptions() == null)
                 throw  new MissingConfigurationException(ErrorMessageGenerationUtil.getErrorMessage(MISSING_CONFIGURATION,ExcelRowBeanMapper.class.getName(),"options"));
             return new ExcelRowBeanMapper(this);
