@@ -3,6 +3,7 @@ package com.poimapper.util;
 import com.poimapper.ExcelRowBeanMapper;
 import com.poimapper.config.DefaultCastString;
 import com.poimapper.constants.ErrorCodes;
+import com.poimapper.exception.ExcelGeneratorException;
 import com.poimapper.exception.MissingConfigurationException;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.*;
@@ -14,6 +15,8 @@ import java.security.SecureRandom;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.logging.Logger;
+
+import static com.poimapper.constants.ErrorCodes.EXCEL_GENERATION_FAILED;
 
 public class ExcelSheetGeneratorUtil {
     private static final Logger logger = Logger.getLogger(DefaultCastString.class.getName());
@@ -46,8 +49,7 @@ public class ExcelSheetGeneratorUtil {
             }
             workbook.write(fileOutputStream);
         }catch (Exception e){
-            logger.warning("Failed to create sheet. "+e.getLocalizedMessage());
-            return false;
+            throw new ExcelGeneratorException(ErrorMessageGenerationUtil.getErrorMessage(EXCEL_GENERATION_FAILED),e);
         }
         return true;
     }

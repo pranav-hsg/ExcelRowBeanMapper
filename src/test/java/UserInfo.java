@@ -24,6 +24,7 @@ public class UserInfo {
     @Data
     @AllArgsConstructor
     @RequiredArgsConstructor
+    @EqualsAndHashCode
     public static class Name {
         private String firstName;
         private String lastName;
@@ -32,6 +33,7 @@ public class UserInfo {
     @Data
     @AllArgsConstructor
     @RequiredArgsConstructor
+    @EqualsAndHashCode
     public static class Status {
         private boolean healthy;
         private String note;

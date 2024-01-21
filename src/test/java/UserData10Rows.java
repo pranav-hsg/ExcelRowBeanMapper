@@ -42,7 +42,7 @@ public class UserData10Rows {
                 UserInfo.UserType.GUEST,
                 LocalDateTime.of(LocalDate.of(2022, 1, 4), LocalTime.of(15, 30, 45)),
                 true,
-                new UserInfo.Name("Mary", "Builder", new UserInfo.Status(false, "yet another note"))
+                new UserInfo.Name("Mary", "Builder", new UserInfo.Status(true, "yet another note"))
         ));
         userInfos.add(new UserInfo(
                 "Eve Explorer",
@@ -54,7 +54,7 @@ public class UserData10Rows {
                 UserInfo.UserType.ADMIN,
                 LocalDateTime.of(LocalDate.of(2022, 1, 5), LocalTime.of(15, 30, 45)),
                 false,
-                new UserInfo.Name("Adam", "Explorer", new UserInfo.Status(false, "some note"))
+                new UserInfo.Name("Adam", "Explorer", new UserInfo.Status(true, "some note"))
         ));
         userInfos.add(new UserInfo(
                 "Charlie Chaplin",
@@ -90,7 +90,7 @@ public class UserData10Rows {
                 UserInfo.UserType.ADMIN,
                 LocalDateTime.of(LocalDate.of(2022, 1, 8), LocalTime.of(15, 30, 45)),
                 true,
-                new UserInfo.Name("Oscar", "Owl", new UserInfo.Status(false, "another test note"))
+                new UserInfo.Name("Oscar", "Owl", new UserInfo.Status(true, "another test note"))
         ));
         userInfos.add(new UserInfo(
                 "Peter Penguin",
@@ -102,7 +102,7 @@ public class UserData10Rows {
                 UserInfo.UserType.STANDARD,
                 LocalDateTime.of(LocalDate.of(2022, 1, 9), LocalTime.of(15, 30, 45)),
                 false,
-                new UserInfo.Name("Pam", "Penguin", new UserInfo.Status(false, "yet another test note"))
+                new UserInfo.Name("Pam", "Penguin", new UserInfo.Status(true, "yet another test note"))
         ));
         userInfos.add(new UserInfo(
                 "Susan Snake",

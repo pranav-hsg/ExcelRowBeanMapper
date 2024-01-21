@@ -1,4 +1,5 @@
 import com.poimapper.ExcelRowBeanMapper;
+import com.poimapper.exception.ExcelRowBeanMapperException;
 import com.poimapper.util.ExcelSheetGeneratorUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -78,6 +79,15 @@ public class ExcelRowBeanMapperTests {
         } catch (IOException e) {
         }
     }
+
+    @Test(expected = ExcelRowBeanMapperException.class)
+    public void testByGeneratingEmptyRowException(){
+        setSecondRowMapping();
+        ExcelRowBeanMapper mapper = new ExcelRowBeanMapper.Builder().setRowMapping(columnMap).build();
+        Sheet sheet = workbook.getSheetAt(0);
+        Row row = sheet.getRow(3);
+        UserInfo userInfo = mapper.fromExcelRow(null,new UserInfo());
+    }
     @Test
     public void testRowBeanMapper(){
         setFirstRowMapping();
@@ -94,7 +104,7 @@ public class ExcelRowBeanMapperTests {
         Sheet sheet = workbook.getSheetAt(0);
         Row row = sheet.getRow(3);
         UserInfo userInfo = mapper.fromExcelRow(row,new UserInfo());
-        System.out.println(userInfo);
+//        System.out.println(userInfo);
         assertThat(userInfo).isEqualTo(expectedUserInfo);
     }
     @Test
@@ -102,7 +112,7 @@ public class ExcelRowBeanMapperTests {
         setSecondRowMapping();
         ExcelRowBeanMapper mapper = new ExcelRowBeanMapper.Builder().setRowMapping(columnMap).build();
         Sheet sheet = workbook.getSheetAt(0);
-        for(int i=4;i<=14;i++){
+        for(int i=4;i<14;i++){
             Row row = sheet.getRow(i);
             UserInfo userInfo = mapper.fromExcelRow(row,new UserInfo());
             UserInfo expectedUser  = UserData10Rows.userInfos.get(i-4);
@@ -115,11 +125,11 @@ public class ExcelRowBeanMapperTests {
         setSecondRowMapping();
         ExcelSheetGeneratorUtil excelSheetGenerator = new ExcelSheetGeneratorUtil
                 .Builder()
-//                .setRowMapping(columnMap)
+                .setRowMapping(columnMap)
                 .setPath("src/test/resources/generated")
                 .build();
         Boolean isSuccess = excelSheetGenerator.generate("GeneratedExcel");
-        System.out.println(isSuccess);
+//        System.out.println(isSuccess);
     }
 
 
