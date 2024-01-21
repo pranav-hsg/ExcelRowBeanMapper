@@ -41,7 +41,7 @@ public class DefaultCastString implements  CastString{
                 return valueOf.invoke(fieldType, value);
             }
         }catch( RuntimeException e){
-            new RuntimeException(e);
+            throw new RuntimeException(e);
         }
         return null;
     }

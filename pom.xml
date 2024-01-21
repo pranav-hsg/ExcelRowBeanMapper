@@ -30,8 +30,8 @@
         <!-- Test Scope Dependencies-->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <version>RELEASE</version>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.10.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -48,20 +48,38 @@
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
+            <artifactId>slf4j-reload4j</artifactId>
             <version>2.0.11</version>
-            <type>pom</type>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13.2</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
     <build>
-        <resources>
-            <resource>
-                <directory>src</directory>
+<!--        <resources>-->
+<!--            <resource>-->
+<!--                <directory>src</directory>-->
+<!--                <excludes>-->
+<!--                    <exclude>test/**</exclude>-->
+<!--                </excludes>-->
+<!--            </resource>-->
+<!--        </resources>-->
+        <plugins>
+        <!-- configure JAR build -->
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-jar-plugin</artifactId>
+            <version>2.3.1</version>
+            <configuration>
                 <excludes>
-                    <exclude>test/**</exclude>
+                    <exclude>src/test/resources/**</exclude>
                 </excludes>
-            </resource>
-        </resources>
+            </configuration>
+        </plugin>
+        </plugins>
     </build>
 </project>
