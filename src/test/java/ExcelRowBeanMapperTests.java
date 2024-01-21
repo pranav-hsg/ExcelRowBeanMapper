@@ -59,7 +59,7 @@ public class ExcelRowBeanMapperTests {
     private void setSecondRowMapping(){
         columnMap = new LinkedHashMap<>();
         columnMap.put("Account Balance",Map.of("fieldMapping","amountBalance","defaultValue",new BigDecimal(3334444)));
-        columnMap.put("Phone Number",Map.of("fieldMapping","phone"));
+        columnMap.put("Phone Number",Map.of("fieldMapping","phones:coolest:toolest"));
         columnMap.put("BirthDate",Map.of("fieldMapping","birthDate","pattern","dd/MM/yyyy"));
         columnMap.put("Gender",Map.of("fieldMapping","gender"));
         columnMap.put("Name",Map.of("fieldMapping","name"));
@@ -108,7 +108,7 @@ public class ExcelRowBeanMapperTests {
         assertThat(userInfo).isEqualTo(expectedUserInfo);
     }
     @Test
-    public void test10RowsForBeanMapper(){
+    public void testFewRowsForBeanMapper(){
         setSecondRowMapping();
         ExcelRowBeanMapper mapper = new ExcelRowBeanMapper.Builder().setRowMapping(columnMap).build();
         Sheet sheet = workbook.getSheetAt(0);
@@ -118,6 +118,19 @@ public class ExcelRowBeanMapperTests {
             UserInfo expectedUser  = UserData10Rows.userInfos.get(i-4);
             assertThat(userInfo).isEqualTo(expectedUser);
         }
+    }
+
+    @Test
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    public void testWithEmptyCellRowBeanMapper(){
+        setSecondRowMapping();
+        ExcelRowBeanMapper mapper = new ExcelRowBeanMapper.Builder()
+                .setRowMapping(columnMap).build();
+        Sheet sheet = workbook.getSheetAt(0);
+        Row row = sheet.getRow(14);
+        UserInfo userInfo = mapper.fromExcelRow(row,new UserInfo());
+//        System.out.println(userInfo);
+        assertThat(userInfo).isEqualTo(expectedUserInfo);
     }
 
     @Test

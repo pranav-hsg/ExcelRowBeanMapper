@@ -19,7 +19,6 @@ import java.util.logging.Logger;
 import static com.poimapper.constants.ErrorCodes.EXCEL_GENERATION_FAILED;
 
 public class ExcelSheetGeneratorUtil {
-    private static final Logger logger = Logger.getLogger(DefaultCastString.class.getName());
     LinkedHashMap<String, Map<String, Object>> rowMapping;
     String path;
     String name;

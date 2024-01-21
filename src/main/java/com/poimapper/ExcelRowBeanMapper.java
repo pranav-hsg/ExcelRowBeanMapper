@@ -6,18 +6,19 @@ import com.poimapper.config.ExcelRowBeanMapperOptions;
 import com.poimapper.exception.ExcelRowBeanMapperException;
 import com.poimapper.exception.MissingConfigurationException;
 import com.poimapper.util.ErrorMessageGenerationUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
+import org.slf4j.MDC;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static com.poimapper.constants.ErrorCodes.*;
-
+@Slf4j
 public class ExcelRowBeanMapper {
-    private static final Logger logger = Logger.getLogger(ExcelRowBeanMapper.class.getName());
+
     private ExcelRowBeanMapper(){
 
     }
@@ -44,7 +45,7 @@ public class ExcelRowBeanMapper {
             }catch (NoSuchFieldException | NoSuchMethodException | InvocationTargetException | IllegalAccessException | InstantiationException e) {
                 if((boolean)mapperSettings.getOrDefault("strictMode",false))
                     throw new ExcelRowBeanMapperException(ErrorMessageGenerationUtil.getErrorMessage(VALUE_HANDLE_EXCEPTION,fieldMapName), e);
-                logger.log(Level.WARNING,ErrorMessageGenerationUtil.getErrorMessage(VALUE_HANDLE_EXCEPTION,fieldMapName), e);
+                log.warn(ErrorMessageGenerationUtil.getErrorMessage(VALUE_HANDLE_EXCEPTION,fieldMapName), e);
             }
             i++;
         }
@@ -94,6 +95,8 @@ public class ExcelRowBeanMapper {
             return this;
         }
         public ExcelRowBeanMapper build() {
+            if((boolean)options.getMapperSettings().getOrDefault("suppressWarnings",true))
+                MDC.put("loggingEnabled",String.valueOf(false));
             if(options.getRowMappingOptions() == null)
                 throw  new MissingConfigurationException(ErrorMessageGenerationUtil.getErrorMessage(MISSING_CONFIGURATION,ExcelRowBeanMapper.class.getName(),"options"));
             return new ExcelRowBeanMapper(this);

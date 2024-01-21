@@ -3,8 +3,7 @@ package com.poimapper.config;
 import com.poimapper.constants.ErrorCodes;
 import com.poimapper.exception.CastException;
 import com.poimapper.util.ErrorMessageGenerationUtil;
-import org.apache.commons.codec.binary.StringUtils;
-import org.apache.logging.log4j.spi.LoggerContext;
+import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -17,10 +16,8 @@ import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
-import java.util.logging.Logger;
-
+@Slf4j
 public class DefaultCastString implements  CastString{
-    private static final Logger logger = Logger.getLogger(DefaultCastString.class.getName());
     ExcelRowBeanMapperOptions defaultOptions =ExcelRowBeanMapperOptions.getInstance();
     public Object apply(Field field, String value, Map<String,Object> options) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         Class<?> fieldType = field.getType();
@@ -65,7 +62,7 @@ public class DefaultCastString implements  CastString{
             String message = ErrorMessageGenerationUtil.getErrorMessage(ErrorCodes.VALUE_CONVERSION_FAILED,field.getName(),value,fieldType);
             if((boolean)defaultOptions.getMapperSettings().getOrDefault("strictMode",false))
                 throw new CastException(message,e);
-            logger.warning("Skipping field '"+field.getName()+"'\tFailed to cast value '"+value+"' from String type to '"+fieldType+"' "+e.getLocalizedMessage());
+            log.warn("Skipping field '"+field.getName()+"'\tFailed to cast value '"+value+"' from String type to '"+fieldType+"' "+e.getLocalizedMessage());
         }
         return null;
     }
