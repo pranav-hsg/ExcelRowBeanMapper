@@ -14,6 +14,7 @@ public class ExcelRowBeanMapperOptions {
 
     private String datePattern = CastConstants.DATE_PATTERN;
     private String dateTimePattern = CastConstants.DATE_TIME_PATTERN;
+    private Map<String,Object> mapperSettings = Map.of("strictMode",false);
     private CastString customCastingFunc;
-    private LinkedHashMap<String, Map<String,String>> rowMappingOptions;
+    private LinkedHashMap<String, Map<String,Object>> rowMappingOptions;
 }

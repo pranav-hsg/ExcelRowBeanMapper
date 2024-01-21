@@ -1,5 +1,5 @@
 import com.poimapper.ExcelRowBeanMapper;
-import lombok.extern.slf4j.Slf4j;
+import com.poimapper.util.ExcelSheetGeneratorUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -11,15 +11,16 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import java.io.File;
+
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 @RunWith(JUnit4.class)
 public class ExcelRowBeanMapperTests {
@@ -36,7 +37,7 @@ public class ExcelRowBeanMapperTests {
             true,
             new UserInfo.Name("Queen", "Silpa", new UserInfo.Status(false, "test note"))
     );
-    private LinkedHashMap<String, Map<String,String>> columnMap = new LinkedHashMap<>();
+    private LinkedHashMap<String, Map<String,Object>> columnMap = new LinkedHashMap<>();
 
     private void setFirstRowMapping(){
         columnMap = new LinkedHashMap<>();
@@ -56,15 +57,15 @@ public class ExcelRowBeanMapperTests {
     }
     private void setSecondRowMapping(){
         columnMap = new LinkedHashMap<>();
-        columnMap.put("accountBalance",Map.of("fieldMapping","amountBalance"));
+        columnMap.put("accountBalance",Map.of("fieldMapping","amountBalance","defaultValue",new BigDecimal(3334444)));
         columnMap.put("phoneNumber",Map.of("fieldMapping","phone"));
-        columnMap.put("birthDate",Map.of("fieldMapping","birthDate"));
+        columnMap.put("birthDate",Map.of("fieldMapping","birthDate","pattern","dd/MM/yyyy"));
         columnMap.put("gender",Map.of("fieldMapping","gender"));
         columnMap.put("name",Map.of("fieldMapping","name"));
         columnMap.put("heightInMeters",Map.of("fieldMapping","heightInMeters"));
         columnMap.put("userType",Map.of("fieldMapping","userType"));
         columnMap.put("isActive",Map.of("fieldMapping","isActive"));
-        columnMap.put("registrationTime",Map.of("fieldMapping","registrationTime"));
+        columnMap.put("registrationTime",Map.of("fieldMapping","registrationTime","pattern","dd/yyyy/MM HH:mm:ss"));
         columnMap.put("firstName",Map.of("fieldMapping","motherInfo:firstName"));
         columnMap.put("lastName",Map.of("fieldMapping","motherInfo:lastName"));
         columnMap.put("healthy",Map.of("fieldMapping","motherInfo:status:healthy"));
@@ -96,6 +97,31 @@ public class ExcelRowBeanMapperTests {
         System.out.println(userInfo);
         assertThat(userInfo).isEqualTo(expectedUserInfo);
     }
+    @Test
+    public void test10RowsForBeanMapper(){
+        setSecondRowMapping();
+        ExcelRowBeanMapper mapper = new ExcelRowBeanMapper.Builder().setRowMapping(columnMap).build();
+        Sheet sheet = workbook.getSheetAt(0);
+        for(int i=4;i<=14;i++){
+            Row row = sheet.getRow(i);
+            UserInfo userInfo = mapper.fromExcelRow(row,new UserInfo());
+            UserInfo expectedUser  = UserData10Rows.userInfos.get(i-4);
+            assertThat(userInfo).isEqualTo(expectedUser);
+        }
+    }
+
+    @Test
+    public void testByGeneratingExcelFile(){
+        setSecondRowMapping();
+        ExcelSheetGeneratorUtil excelSheetGenerator = new ExcelSheetGeneratorUtil
+                .Builder()
+//                .setRowMapping(columnMap)
+                .setPath("src/test/resources/generated")
+                .build();
+        Boolean isSuccess = excelSheetGenerator.generate("GeneratedExcel");
+        System.out.println(isSuccess);
+    }
+
 
     @AfterClass
     public static void tearDown() {
