@@ -6,11 +6,22 @@
 
     <groupId>com.github.pranav-hsg</groupId>
     <artifactId>poimapper</artifactId>
-    <version>1.0.0</version>
+    <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>poimapper</name>
     <description>poimapper maps excel rows to java bean</description>
     <url>https://github.com/pranav-hsg/poimapper</url>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
 
     <licenses>
         <license>
