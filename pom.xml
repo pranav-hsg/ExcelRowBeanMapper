@@ -1,22 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <groupId>com.github.pranav-hsg</groupId>
+    <artifactId>poimapper</artifactId>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
     <name>poimapper</name>
-    <description> poimapper maps excel rows to java bean</description>
+    <description>poimapper maps excel rows to java bean</description>
     <url>https://github.com/pranav-hsg/poimapper</url>
 
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>http://www.opensource.org/licenses/mit-license.php</url>
+        </license>
+    </licenses>
+
+    <scm>
+        <connection>scm:git:git://github.com/pranav-hsg/poimapper.git</connection>
+        <developerConnection>scm:git:ssh://github.com:pranav-hsg/poimapper.git</developerConnection>
+        <url>http://github.com/pranav-hsg/poimapper/tree/master</url>
+    </scm>
     <developers>
         <developer>
             <name>Pranav HS</name>
             <email>pranavprati@gmail.com</email>
         </developer>
     </developers>
-    <groupId>com.github.pranavhsg</groupId>
-    <artifactId>ExcelRowBeanMapper</artifactId>
-    <version>1.0-SNAPSHOT</version>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
@@ -24,6 +37,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <dependencies>
+
         <!-- Dependencies-->
         <dependency>
             <groupId>org.apache.poi</groupId>
@@ -31,32 +45,18 @@
             <version>5.2.5</version>
         </dependency>
         <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>2.0.11</version>
+        </dependency>
+
+        <!-- Compile Time Dependencies-->
+        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.18.30</version>
             <scope>compile</scope>
         </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>2.0.11</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-simple -->
-        <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-log4j12 -->
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-to-slf4j</artifactId>
-            <version>2.8.2</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>2.0.11</version>
-            <scope>test</scope>
-        </dependency>
-
 
 
         <!-- Test Scope Dependencies-->
@@ -78,28 +78,32 @@
             <version>4.13.2</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-to-slf4j</artifactId>
+            <version>2.8.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>2.0.11</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
     <build>
-<!--        <resources>-->
-<!--            <resource>-->
-<!--                <directory>src</directory>-->
-<!--                <excludes>-->
-<!--                    <exclude>test/**</exclude>-->
-<!--                </excludes>-->
-<!--            </resource>-->
-<!--        </resources>-->
         <plugins>
-        <!-- configure JAR build -->
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-jar-plugin</artifactId>
-            <version>2.3.1</version>
-            <configuration>
-                <excludes>
-                    <exclude>src/test/resources/**</exclude>
-                </excludes>
-            </configuration>
-        </plugin>
+            <!-- configure JAR build -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.3.1</version>
+                <configuration>
+                    <excludes>
+                        <exclude>src/test/resources/**</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 </project>
