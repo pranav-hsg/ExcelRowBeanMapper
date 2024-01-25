@@ -6,7 +6,7 @@
 
     <groupId>io.github.pranav-hsg</groupId>
     <artifactId>poimapper</artifactId>
-    <version>1.0-snapshot</version>
+    <version>1.0.0</version>
     <packaging>jar</packaging>
     <name>poimapper</name>
     <description>Library that generates java bean from excel row</description>
