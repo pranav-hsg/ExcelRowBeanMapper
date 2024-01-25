@@ -52,11 +52,16 @@ This approach simplifies the mapping process and enhances flexibility. Additiona
 
 ## Usage
 
+### To convert excel row to java object
+
 ```java
 
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import com.poimapper.ExcelRowBeanMapper;
+import java.util.LinkedHashMap; 
+import java.util.Map;
 
 // Declare the column mapping.
 LinkedHashMap<String, Map<String, Object>> columnMap = new LinkedHashMap<>();
@@ -85,6 +90,20 @@ public class SimpleTestDto {
         private BigDecimal value;
     }
 }
+```
+
+### To generate excel sheet from excel mapping
+
+
+```java
+import com.poimapper.util.ExcelSheetGeneratorUtil;
+
+ExcelSheetGeneratorUtil excelSheetGenerator = new ExcelSheetGeneratorUtil
+                .Builder()
+                .setRowMapping(columnMap)
+                .setPath("src/test/resources/generated")
+                .build();
+        Boolean isSuccess = excelSheetGenerator.generate("GeneratedExcel");
 ```
 ## License
 
