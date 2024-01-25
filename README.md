@@ -103,7 +103,7 @@ ExcelSheetGeneratorUtil excelSheetGenerator = new ExcelSheetGeneratorUtil
                 .setRowMapping(columnMap)
                 .setPath("src/test/resources/generated")
                 .build();
-        Boolean isSuccess = excelSheetGenerator.generate("GeneratedExcel");
+Boolean isSuccess = excelSheetGenerator.generate("GeneratedExcel");
 ```
 ## License
 
