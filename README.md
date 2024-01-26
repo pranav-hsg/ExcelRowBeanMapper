@@ -3,11 +3,13 @@
 
 It is a lightweight library designed to convert Excel rows into Java beans, offering the additional capability to generate Excel sheets based on specified mappings
 
-# Table of contents
+## Table of contents
 
 * [Getting started](#gs)
 * [Why use poimapper](#why-use)
 * [Usage](#usage)
+  * [Mapping excel row to bean](#usage-mapping)
+  * [Generating excel sheet with headers](#usage-generate-excel)
 * [License](#license)
 
 ## Getting Started <a name="gs"></a>
@@ -20,6 +22,24 @@ It is a lightweight library designed to convert Excel rows into Java beans, offe
 </dependency
 ```
 For the most up-to-date information, check out the latest details  <ins>[here](https://central.sonatype.com/artifact/io.github.pranav-hsg/poimapper/1.0.0)</ins>.
+
+## Description
+Overview
+The Excel Manipulation Library is a powerful Java tool designed to simplify Excel sheet manipulation. It eliminates the need for manual index updates when rearranging columns, thanks to its intelligent use of a column map. This map, represented by a LinkedHashMap, organizes columns logically and automatically handles index updates.
+
+### Features
+
+* **Header Arrangement**
+  In the traditional approach, you need to manually update indices. However, with this library, there's no need for manual index management. The column order is determined automatically by adding entries to the linked hash map.
+  
+
+* **DataType Detection**
+Automatically detects various data types, including String, Integer, Double, Boolean, LocalDate, LocalDateTime, ZonedDateTime, BigDecimal, Enum, and more.
+Handles nested types by calling the constructor based on the field type and sets value directly. Also you can pass a customized type conversion logic, Please refer to [see more](#customized-type-conversion).
+
+
+* **Excel Sheet Generation**
+Makes it easy to create Excel sheet headers by using the provided column map. This saves you from having to manually map headers each time you rearrange them in your code and helps prevent errors related to manual index adjustments.
 
 ## Why use poimapper <a name="why-use"></a>
 
@@ -69,7 +89,7 @@ This approach simplifies the mapping process and enhances flexibility. Additiona
 
 ## Usage <a name="usage"></a>
 
-### To convert excel row to java object
+### To convert excel row to java object <a name="usage-mapping"></a>
 
 ```java
 
@@ -109,7 +129,7 @@ public class SimpleTestDto {
 }
 ```
 
-### To generate excel sheet from excel mapping
+### To generate excel sheet from excel mapping <a name="usage-generate-excel"></a>
 
 
 ```java
@@ -122,6 +142,19 @@ ExcelSheetGeneratorUtil excelSheetGenerator = new ExcelSheetGeneratorUtil
                 .build();
 Boolean isSuccess = excelSheetGenerator.generate("GeneratedExcel");
 ```
+## Type casting
+By default these types are casted from string type a cell based on the field type of bean.
+* String
+* Integer and int
+* Double and double
+* Boolean and boolean
+* LocalDate
+* LocalDateTime
+* ZonedDateTime
+* BigDecimal
+* Enum
+* Number
+
 ## License <a name="license"></a>
 
 [MIT](https://choosealicense.com/licenses/mit/)
