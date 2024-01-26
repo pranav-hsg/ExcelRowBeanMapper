@@ -7,8 +7,6 @@ It is a lightweight library designed to convert Excel rows into Java beans, offe
 
 * [Getting started](#gs)
 * [Why use poimapper](#why-use)
-    * [Traditional approach](#why-use-ta)
-    * [New approach](#why-use-pa)
 * [Usage](#usage)
 * [License](#license)
 
@@ -29,7 +27,7 @@ This library streamlines the mapping of Excel rows to Java beans by introducing 
 
 Consider a scenario where a new column 'Address' needs to be added before the existing 2nd column. In the traditional approach, manual index updates are necessary. However, with this library, you can effortlessly group related columns in the columnMap, avoiding manual adjustments.
 
-```java  <a name="why-use-ta"></a>
+```java  
 // Traditional method with manual index updates
 Cell cell0 = row.getCell(0);
 String name = cell0.getStringCellValue();
@@ -58,7 +56,7 @@ String amount = cell2.getStringCellValue();
 ```
 With the poimapper, the columnMap specifies the order of columns, providing a more flexible and maintainable solution:
 
-```java <a name="why-use-pa"></a>
+```java 
 columnMap.put("Name", Map.of("fieldMapping", "name", "defaultValue", "Beta"));
 columnMap.put("Address", Map.of("fieldMapping", "address"));
 columnMap.put("BirthDate", Map.of("fieldMapping", "birthDate", "pattern", "yyyy-MM-dd"));
