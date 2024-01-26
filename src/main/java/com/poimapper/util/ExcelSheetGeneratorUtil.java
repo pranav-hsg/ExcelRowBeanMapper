@@ -26,7 +26,7 @@ public class ExcelSheetGeneratorUtil {
     ExcelSheetGeneratorUtil(Builder builder){
         rowMapping = builder.rowMapping;
         path = builder.path;
-        name = (builder.name == null ? "GeneratedExcel_"+new SecureRandom().nextInt(1000,100000)+".xlsx" : builder.name+".xlsx");
+        name = (builder.name == null ? "GeneratedExcel_"+new SecureRandom().nextInt(100000)+".xlsx" : builder.name+".xlsx");
     }
     public boolean generate(String passedName){
         name = passedName != null ? passedName+".xlsx" : name;

@@ -56,7 +56,7 @@ public class ExcelRowBeanMapper {
         Object currentClassInstance = dto;
         List<String> fields = new LinkedList<>(List.of(fieldMapName.split(":")));
         while (true){
-            String curFieldMapName = fields.removeFirst();
+            String curFieldMapName = fields.remove(0);
             Field curField =  currentClassInstance.getClass().getDeclaredField(curFieldMapName);
             curField.setAccessible(true);
             if(fields.isEmpty()) {
