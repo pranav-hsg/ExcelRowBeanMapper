@@ -6,9 +6,9 @@ It is a lightweight library designed to convert Excel rows into Java beans, offe
 # Table of contents
 
 * [Getting started](#gs)
-* [Why use poimapper](#whyUse)
-    * [Traditional approach](#whyUse-ta)
-    * [New approach](#whyUse-pa)
+* [Why use poimapper](#why-use)
+    * [Traditional approach](#why-use-ta)
+    * [New approach](#why-use-pa)
 * [Usage](#usage)
 * [License](#license)
 
@@ -23,13 +23,13 @@ It is a lightweight library designed to convert Excel rows into Java beans, offe
 ```
 For the most up-to-date information, check out the latest details  <ins>[here](https://central.sonatype.com/artifact/io.github.pranav-hsg/poimapper/1.0.0)</ins>.
 
-## Why use poimapper <a name="whyUse"></a>
+## Why use poimapper <a name="why-use"></a>
 
 This library streamlines the mapping of Excel rows to Java beans by introducing a columnMap mechanism, eliminating the need for manual index adjustments when altering the Excel column order. Unlike traditional methods that require meticulous index updates, the columnMap relies on a LinkedHashMap to maintain the specified order of columns.
 
 Consider a scenario where a new column 'Address' needs to be added before the existing 2nd column. In the traditional approach, manual index updates are necessary. However, with this library, you can effortlessly group related columns in the columnMap, avoiding manual adjustments.
 
-```java  <a name="whyUse-ta"></a>
+```java  <a name="why-use-ta"></a>
 // Traditional method with manual index updates
 Cell cell0 = row.getCell(0);
 String name = cell0.getStringCellValue();
@@ -58,7 +58,7 @@ String amount = cell2.getStringCellValue();
 ```
 With the poimapper, the columnMap specifies the order of columns, providing a more flexible and maintainable solution:
 
-```java <a name="whyUse-pa"></a>
+```java <a name="why-use-pa"></a>
 columnMap.put("Name", Map.of("fieldMapping", "name", "defaultValue", "Beta"));
 columnMap.put("Address", Map.of("fieldMapping", "address"));
 columnMap.put("BirthDate", Map.of("fieldMapping", "birthDate", "pattern", "yyyy-MM-dd"));
