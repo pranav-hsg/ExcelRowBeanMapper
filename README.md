@@ -21,12 +21,12 @@ Maven import
 <dependency>
     <groupId>io.github.pranav-hsg</groupId>
     <artifactId>poimapper</artifactId>
-    <version>2.0.0</version>
+    <version>2.0.1</version>
 </dependency
 ```
 Gradle import
 ```properties
-implementation group: 'io.github.pranav-hsg', name: 'poimapper', version: '2.0.0'
+implementation group: 'io.github.pranav-hsg', name: 'poimapper', version: '2.0.1'
 ```
 
 For the most up-to-date information, check out the latest details [here](https://central.sonatype.com/artifact/io.github.pranav-hsg/poimapper/1.0.0).
@@ -124,9 +124,7 @@ for (int i = 1; i < sheet.getLastRowNum(); i++) {
     SimpleTestDto userInfo = mapper.fromExcelRow(row, new SimpleTestDto());
     System.out.println(userInfo);
 }
-```
 
-```java
 public class SimpleTestDto {
     private String name;
     private LocalDate birthDate;
@@ -135,6 +133,35 @@ public class SimpleTestDto {
         private BigDecimal value;
     }
 }
+```
+**PoiConfig :** List of constructors
+
+```java
+import com.poimapper.config.PoiConfig;
+
+public PoiConfig();
+
+public PoiConfig(String fieldName);
+
+public PoiConfig(String fieldName, String pattern);
+
+public PoiConfig(String fieldName, String pattern, Object defaultValue);
+
+// In addition to the traditional constructor methods, an alternative approach for constructing
+// - instances is provided through the use of the Builder pattern.
+
+PoiConfig.builder()
+        .fieldName("name")
+        .defaultValue("default")
+        .pattern(null)
+        .build();
+
+// fieldName   : field name to which mapper maps to
+// pattern     : Pattern to override for date and time
+// defaultValue: Default value to use if Excel cell is empty
+```
+```java
+ExcelRowBeanMapper mapper = new ExcelRowBeanMapper.Builder().setRowMapping(columnMap).build();
 ```
 
 ### To generate excel sheet from excel mapping <a name="usage-generate-excel"></a>

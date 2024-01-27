@@ -60,9 +60,9 @@ public class DefaultCastString implements  CastString{
             }
         }catch(RuntimeException | ParseException e){
             String message = ErrorMessageGenerationUtil.getErrorMessage(ErrorCodes.VALUE_CONVERSION_FAILED,field.getName(),value,fieldType);
-            if((boolean)defaultOptions.getPoiBuilderConfig().getStrictMode())
+            if(defaultOptions.getPoiBuilderConfig().isStrictMode())
                 throw new CastException(message,e);
-            if(!(boolean)defaultOptions.getPoiBuilderConfig().getSuppressWarnings())
+            if(!defaultOptions.getPoiBuilderConfig().isSuppressWarnings())
                 log.warn("Skipping field '"+field.getName()+"'\tFailed to cast value '"+value+"' from String type to '"+fieldType+"' "+e.getLocalizedMessage());
         }
         return null;

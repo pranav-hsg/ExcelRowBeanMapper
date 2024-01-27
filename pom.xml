@@ -6,7 +6,7 @@
 
     <groupId>io.github.pranav-hsg</groupId>
     <artifactId>poimapper</artifactId>
-    <version>2.0.0</version>
+    <version>2.0.1</version>
     <packaging>jar</packaging>
     <name>poimapper</name>
     <description>Library that generates java bean from excel row</description>
@@ -77,12 +77,6 @@
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>
             <version>5.2.5</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.assertj</groupId>
-            <artifactId>assertj-core</artifactId>
-            <version>3.25.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>

@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.0.1] - 2024-01-27
+
+- **Bug Fix:** PoiBuilderConfig builder settings fix and enhancements.
+
 ## [2.0.0] - 2024-01-27
 
 ### Breaking Changes

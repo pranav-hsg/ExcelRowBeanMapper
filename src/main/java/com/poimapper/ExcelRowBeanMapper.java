@@ -7,8 +7,6 @@ import com.poimapper.util.ErrorMessageGenerationUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
-import org.slf4j.MDC;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
@@ -41,9 +39,9 @@ public class ExcelRowBeanMapper {
             try{
                 setNestedValue(dto,fieldMapName,cellValue,entry.getValue());
             }catch (NoSuchFieldException | NoSuchMethodException | InvocationTargetException | IllegalAccessException | InstantiationException e) {
-                if(poiBuilderConfig.getStrictMode())
+                if(poiBuilderConfig.isStrictMode())
                     throw new ExcelRowBeanMapperException(ErrorMessageGenerationUtil.getErrorMessage(VALUE_HANDLE_EXCEPTION,fieldMapName), e);
-                if(poiBuilderConfig.getSuppressWarnings())
+                if(!poiBuilderConfig.isSuppressWarnings())
                     log.warn(ErrorMessageGenerationUtil.getErrorMessage(VALUE_HANDLE_EXCEPTION,fieldMapName), e);
             }
             i++;
@@ -96,6 +94,8 @@ public class ExcelRowBeanMapper {
         public ExcelRowBeanMapper build() {
             if(options.getRowMappingOptions() == null)
                 throw  new MissingConfigurationException(ErrorMessageGenerationUtil.getErrorMessage(MISSING_CONFIGURATION,ExcelRowBeanMapper.class.getName(),"options"));
+            if(options.getPoiBuilderConfig()==null)
+                options.setPoiBuilderConfig(new PoiBuilderConfig());
             return new ExcelRowBeanMapper(this);
         }
     }
