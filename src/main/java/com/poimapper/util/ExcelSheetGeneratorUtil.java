@@ -2,6 +2,7 @@ package com.poimapper.util;
 
 import com.poimapper.ExcelRowBeanMapper;
 import com.poimapper.config.DefaultCastString;
+import com.poimapper.config.PoiConfig;
 import com.poimapper.constants.ErrorCodes;
 import com.poimapper.exception.ExcelGeneratorException;
 import com.poimapper.exception.MissingConfigurationException;
@@ -19,7 +20,7 @@ import java.util.logging.Logger;
 import static com.poimapper.constants.ErrorCodes.EXCEL_GENERATION_FAILED;
 
 public class ExcelSheetGeneratorUtil {
-    LinkedHashMap<String, Map<String, Object>> rowMapping;
+    LinkedHashMap<String,PoiConfig> rowMapping;
     String path;
     String name;
     ExcelSheetGeneratorUtil(){}
@@ -41,7 +42,7 @@ public class ExcelSheetGeneratorUtil {
             if (row == null)
                 row = worksheet.createRow(0);
             int col = 0;
-            for(Map.Entry<String,Map<String,Object>> rowMap: rowMapping.entrySet()){
+            for(Map.Entry<String,PoiConfig> rowMap: rowMapping.entrySet()){
                 Cell cell = row.createCell(col++);
                 cell.setCellValue(rowMap.getKey());
                 cell.setCellStyle(cellStyle);
@@ -53,11 +54,11 @@ public class ExcelSheetGeneratorUtil {
         return true;
     }
     public static class Builder {
-        LinkedHashMap<String, Map<String, Object>> rowMapping;
+        LinkedHashMap<String, PoiConfig> rowMapping;
         String path;
         String name;
 
-        public Builder setRowMapping(LinkedHashMap<String, Map<String, Object>> rowMapping) {
+        public Builder setRowMapping(LinkedHashMap<String, PoiConfig> rowMapping) {
             this.rowMapping =rowMapping;
             return this;
         }

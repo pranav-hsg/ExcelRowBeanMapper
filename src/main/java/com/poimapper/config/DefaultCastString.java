@@ -19,11 +19,11 @@ import java.util.Map;
 @Slf4j
 public class DefaultCastString implements  CastString{
     ExcelRowBeanMapperOptions defaultOptions =ExcelRowBeanMapperOptions.getInstance();
-    public Object apply(Field field, String value, Map<String,Object> options) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    public Object apply(Field field, String value, PoiConfig config) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         Class<?> fieldType = field.getType();
-        String datePattern = options.get("pattern")!=null ? (String)options.get("pattern") :  defaultOptions.getDatePattern();
-        String dateTimePattern = options.get("pattern") != null ? (String)options.get("pattern") : defaultOptions.getDateTimePattern();
-        Object defaultValue = options.getOrDefault("defaultValue",null);
+        String datePattern =config.getPattern()!=null ? config.getPattern() :  defaultOptions.getDatePattern();
+        String dateTimePattern = config.getPattern() != null ? config.getPattern() : defaultOptions.getDateTimePattern();
+        Object defaultValue = config.getDefaultValue();
         if( (value==null || value.trim().isEmpty()) && defaultValue != null)
             return defaultValue;
         if(value == null)
@@ -60,9 +60,9 @@ public class DefaultCastString implements  CastString{
             }
         }catch(RuntimeException | ParseException e){
             String message = ErrorMessageGenerationUtil.getErrorMessage(ErrorCodes.VALUE_CONVERSION_FAILED,field.getName(),value,fieldType);
-            if((boolean)defaultOptions.getMapperSettings().getOrDefault("strictMode",false))
+            if((boolean)defaultOptions.getPoiBuilderConfig().getStrictMode())
                 throw new CastException(message,e);
-            if(!(boolean)defaultOptions.getMapperSettings().getOrDefault("suppressWarnings",true))
+            if(!(boolean)defaultOptions.getPoiBuilderConfig().getSuppressWarnings())
                 log.warn("Skipping field '"+field.getName()+"'\tFailed to cast value '"+value+"' from String type to '"+fieldType+"' "+e.getLocalizedMessage());
         }
         return null;

@@ -1,8 +1,6 @@
 package com.poimapper;
 
-import com.poimapper.config.CastString;
-import com.poimapper.config.DefaultCastString;
-import com.poimapper.config.ExcelRowBeanMapperOptions;
+import com.poimapper.config.*;
 import com.poimapper.exception.ExcelRowBeanMapperException;
 import com.poimapper.exception.MissingConfigurationException;
 import com.poimapper.util.ErrorMessageGenerationUtil;
@@ -25,11 +23,11 @@ public class ExcelRowBeanMapper {
     private ExcelRowBeanMapper(Builder builder){
         rowMapping = builder.options.getRowMappingOptions();
         customStringCastingFunc = builder.options.getCustomCastingFunc()!= null ?builder.options.getCustomCastingFunc() :  new DefaultCastString();
-        mapperSettings = builder.options.getMapperSettings() !=null ? builder.options.getMapperSettings() : new HashMap<>();
+        poiBuilderConfig = builder.options.getPoiBuilderConfig();
     }
-    private  LinkedHashMap<String, Map<String,Object>> rowMapping = null;
+    private  LinkedHashMap<String, PoiConfig> rowMapping = null;
 
-    private Map<String,Object> mapperSettings;
+    private PoiBuilderConfig poiBuilderConfig;
     private  CastString customStringCastingFunc;
 
     private final DataFormatter dataFormatter = new DataFormatter();
@@ -37,22 +35,22 @@ public class ExcelRowBeanMapper {
         if(row == null)
             throw new ExcelRowBeanMapperException(ErrorMessageGenerationUtil.getErrorMessage(EMPTY_ROW_EXCEPTION));
         int i = 0;
-        for (Map.Entry<String, Map<String,Object>> entry : rowMapping.entrySet()) {
+        for (Map.Entry<String,PoiConfig> entry : rowMapping.entrySet()) {
             String cellValue = dataFormatter.formatCellValue(row.getCell(i));
-            String fieldMapName = (String) entry.getValue().get("fieldMapping");
+            String fieldMapName = entry.getValue().getFieldName();
             try{
                 setNestedValue(dto,fieldMapName,cellValue,entry.getValue());
             }catch (NoSuchFieldException | NoSuchMethodException | InvocationTargetException | IllegalAccessException | InstantiationException e) {
-                if((boolean)mapperSettings.getOrDefault("strictMode",false))
+                if(poiBuilderConfig.getStrictMode())
                     throw new ExcelRowBeanMapperException(ErrorMessageGenerationUtil.getErrorMessage(VALUE_HANDLE_EXCEPTION,fieldMapName), e);
-                if(!(boolean)mapperSettings.getOrDefault("suppressWarnings",true))
+                if(poiBuilderConfig.getSuppressWarnings())
                     log.warn(ErrorMessageGenerationUtil.getErrorMessage(VALUE_HANDLE_EXCEPTION,fieldMapName), e);
             }
             i++;
         }
         return dto;
     }
-    private  <T> void setNestedValue(T dto, String fieldMapName, String cellValue,Map<String,Object> options) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, InstantiationException, NoSuchFieldException {
+    private  <T> void setNestedValue(T dto, String fieldMapName, String cellValue,PoiConfig config) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, InstantiationException, NoSuchFieldException {
         Object currentClassInstance = dto;
         List<String> fields = new LinkedList<>(List.of(fieldMapName.split(":")));
         while (true){
@@ -61,7 +59,7 @@ public class ExcelRowBeanMapper {
             curField.setAccessible(true);
             if(fields.isEmpty()) {
                 // For non nested Fields set the value by casting string to particular data type of the field
-                curField.set(currentClassInstance, customStringCastingFunc.apply(curField,cellValue,options) );
+                curField.set(currentClassInstance, customStringCastingFunc.apply(curField,cellValue,config) );
                 break;
             }
             Object getterValue = curField.get(currentClassInstance);
@@ -73,7 +71,7 @@ public class ExcelRowBeanMapper {
     public static class Builder {
         ExcelRowBeanMapperOptions options = ExcelRowBeanMapperOptions.getInstance();
 
-        public Builder setRowMapping(LinkedHashMap<String, Map<String, Object>> rowMapping) {
+        public Builder setRowMapping(LinkedHashMap<String, PoiConfig> rowMapping) {
             options.setRowMappingOptions(rowMapping);
             return this;
         }
@@ -90,9 +88,9 @@ public class ExcelRowBeanMapper {
             options.setDateTimePattern(format);
             return this;
         }
-        public Builder setMapperSettings(Map<String,Object> mapperSettings){
-            if(mapperSettings!=null)
-                options.setMapperSettings(mapperSettings);
+        public Builder setMapperSettings(PoiBuilderConfig poiBuilderConfig){
+            if(poiBuilderConfig!=null)
+                options.setPoiBuilderConfig(poiBuilderConfig);
             return this;
         }
         public ExcelRowBeanMapper build() {

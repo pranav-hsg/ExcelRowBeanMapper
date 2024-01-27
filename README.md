@@ -16,15 +16,20 @@ It is a lightweight library designed to convert Excel rows into Java beans, offe
 * [License](#license)
 
 ## Getting Started <a name="gs"></a>
-
+Maven import
 ``` xml
-<dependency>>
+<dependency>
     <groupId>io.github.pranav-hsg</groupId>
     <artifactId>poimapper</artifactId>
-    <version>1.0.1</version>
+    <version>2.0.0</version>
 </dependency
 ```
-For the most up-to-date information, check out the latest details  <ins>[here](https://central.sonatype.com/artifact/io.github.pranav-hsg/poimapper/1.0.0)</ins>.
+Gradle import
+```properties
+implementation group: 'io.github.pranav-hsg', name: 'poimapper', version: '2.0.0'
+```
+
+For the most up-to-date information, check out the latest details [here](https://central.sonatype.com/artifact/io.github.pranav-hsg/poimapper/1.0.0).
 
 ## Description <a name="desc"></a>
 The poimapper library is a powerful Java tool designed to simplify Excel sheet mapping to java object. It eliminates the need for manual index updates when rearranging columns, thanks to its intelligent use of a column map. This map, represented by a LinkedHashMap, organizes columns logically and automatically handles index updates.
@@ -68,7 +73,7 @@ String name = cell0.getStringCellValue();
 Cell cell1 = row.getCell(1); 
 String address = cell1.getStringCellValue();
 Cell cell2 = row.getCell(2); // Manually updated index
-String address = cell1.getStringCellValue();
+String birthDate = cell1.getStringCellValue();
 .
 .
 .
@@ -79,13 +84,13 @@ String amount = cell2.getStringCellValue();
 With the poimapper, the columnMap specifies the order of columns, providing a more flexible and maintainable solution:
 
 ```java 
-columnMap.put("Name", Map.of("fieldMapping", "name", "defaultValue", "Beta"));
-columnMap.put("Address", Map.of("fieldMapping", "address"));
-columnMap.put("BirthDate", Map.of("fieldMapping", "birthDate", "pattern", "yyyy-MM-dd"));
+columnMap.put("Name", new PoiConfig("name"));
+columnMap.put("Address", new PoiConfig( "address"));
+columnMap.put("BirthDate", new PoiConfig( "birthDate"));
 .
 .
 .
-columnMap.put("Amount", Map.of("fieldMapping", "amount:value"));
+columnMap.put("Amount", new PoiConfig("amount"));
 ```
 No more manual index update.This approach simplifies the mapping process and enhances flexibility. Additionally, the library allows the generation of Excel sheets directly from the columnMap, offering a comprehensive solution for diverse Excel structures. See more on excel generation feature in usage section.
 
@@ -99,17 +104,18 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import com.poimapper.ExcelRowBeanMapper;
+import com.poimapper.config.PoiConfig;
 import java.util.LinkedHashMap; 
 import java.util.Map;
 
 // Declare the column mapping.
-LinkedHashMap<String, Map<String, Object>> columnMap = new LinkedHashMap<>();
+LinkedHashMap<String,PoiConfig> columnMap = new LinkedHashMap<>();
 // Default value is used when cell is empty
-columnMap.put("Name", Map.of("fieldMapping", "name", "defaultValue", "Beta"));
+columnMap.put("Name", new PoiConfig("name", null, "Beta"));
 // Pattern is used to override default date format
-columnMap.put("Birth Date", Map.of("fieldMapping", "birthDate", "pattern", "yyyy-MM-dd"));
+columnMap.put("Birth Date",new PoiConfig("birthDate", "yyyy-MM-dd"));
 // Colon is used in field mapping is used to indicate nested field
-columnMap.put("Amount", Map.of("fieldMapping", "amount:value"));
+columnMap.put("Amount", new PoiConfig( "amount:value"));
 
 ExcelRowBeanMapper mapper = new ExcelRowBeanMapper.Builder().setRowMapping(columnMap).build();
 Sheet sheet = workbook.getSheetAt(1);
@@ -175,7 +181,7 @@ You can even customize your mapping based on your own implementation. This will 
 import com.poimapper.util.ExcelSheetGeneratorUtil;
 
 // Declare a custom cast method
-public Object customCast(Field field, String value, Map<String,Object> options){
+public Object customCast(Field field, String value,PoiConfig config){
   Class<?> fieldType = field.getType();
   if (fieldType == String.class) {
     return value;

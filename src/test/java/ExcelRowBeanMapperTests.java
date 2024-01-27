@@ -1,4 +1,5 @@
 import com.poimapper.ExcelRowBeanMapper;
+import com.poimapper.config.PoiConfig;
 import com.poimapper.exception.ExcelRowBeanMapperException;
 import com.poimapper.util.ExcelSheetGeneratorUtil;
 import org.apache.poi.ss.usermodel.Row;
@@ -38,39 +39,39 @@ public class ExcelRowBeanMapperTests {
             true,
             new UserInfo.Name("Queen", "Silpa", new UserInfo.Status(false, "test note"))
     );
-    private LinkedHashMap<String, Map<String,Object>> columnMap = new LinkedHashMap<>();
+    private LinkedHashMap<String, PoiConfig> columnMap = new LinkedHashMap<>();
 
     private void setFirstRowMapping(){
         columnMap = new LinkedHashMap<>();
-        columnMap.put("name",Map.of("fieldMapping","name"));
-        columnMap.put("birthDate",Map.of("fieldMapping","birthDate"));
-        columnMap.put("phoneNumber",Map.of("fieldMapping","phone"));
-        columnMap.put("heightInMeters",Map.of("fieldMapping","heightInMeters"));
-        columnMap.put("accountBalance",Map.of("fieldMapping","amountBalance"));
-        columnMap.put("gender",Map.of("fieldMapping","gender"));
-        columnMap.put("userType",Map.of("fieldMapping","userType"));
-        columnMap.put("registrationTime",Map.of("fieldMapping","registrationTime"));
-        columnMap.put("isActive",Map.of("fieldMapping","isActive"));
-        columnMap.put("firstName",Map.of("fieldMapping","motherInfo:firstName"));
-        columnMap.put("lastName",Map.of("fieldMapping","motherInfo:lastName"));
-        columnMap.put("healthy",Map.of("fieldMapping","motherInfo:status:healthy"));
-        columnMap.put("note",Map.of("fieldMapping","motherInfo:status:note"));
+        columnMap.put("name",new PoiConfig("name"));
+        columnMap.put("birthDate",new PoiConfig("birthDate"));
+        columnMap.put("phoneNumber",new PoiConfig("phone"));
+        columnMap.put("heightInMeters",new PoiConfig("heightInMeters"));
+        columnMap.put("accountBalance",new PoiConfig("amountBalance"));
+        columnMap.put("gender",new PoiConfig("gender"));
+        columnMap.put("userType",new PoiConfig("userType"));
+        columnMap.put("registrationTime",new PoiConfig("registrationTime"));
+        columnMap.put("isActive",new PoiConfig("isActive"));
+        columnMap.put("firstName",new PoiConfig("motherInfo:firstName"));
+        columnMap.put("lastName",new PoiConfig("motherInfo:lastName"));
+        columnMap.put("healthy",new PoiConfig("motherInfo:status:healthy"));
+        columnMap.put("note",new PoiConfig("motherInfo:status:note"));
     }
     private void setSecondRowMapping(){
         columnMap = new LinkedHashMap<>();
-        columnMap.put("Account Balance",Map.of("fieldMapping","amountBalance","defaultValue",new BigDecimal(3334444)));
-        columnMap.put("Phone Number",Map.of("fieldMapping","phone"));
-        columnMap.put("BirthDate",Map.of("fieldMapping","birthDate","pattern","dd/MM/yyyy"));
-        columnMap.put("Gender",Map.of("fieldMapping","gender"));
-        columnMap.put("Name",Map.of("fieldMapping","name"));
-        columnMap.put("Height In Meters",Map.of("fieldMapping","heightInMeters"));
-        columnMap.put("User Type",Map.of("fieldMapping","userType"));
-        columnMap.put("Is Active",Map.of("fieldMapping","isActive"));
-        columnMap.put("Registration Time",Map.of("fieldMapping","registrationTime","pattern","dd/yyyy/MM HH:mm:ss"));
-        columnMap.put("First Name",Map.of("fieldMapping","motherInfo:firstName"));
-        columnMap.put("Last kName",Map.of("fieldMapping","motherInfo:lastName"));
-        columnMap.put("Healthy",Map.of("fieldMapping","motherInfo:status:healthy"));
-        columnMap.put("Note",Map.of("fieldMapping","motherInfo:status:note"));
+        columnMap.put("Account Balance",new PoiConfig("amountBalance",null,new BigDecimal(3334444)));
+        columnMap.put("Phone Number",new PoiConfig("phone"));
+        columnMap.put("BirthDate",new PoiConfig("birthDate","dd/MM/yyyy"));
+        columnMap.put("Gender",new PoiConfig("gender"));
+        columnMap.put("Name",new PoiConfig("name"));
+        columnMap.put("Height In Meters",new PoiConfig("heightInMeters"));
+        columnMap.put("User Type",new PoiConfig("userType"));
+        columnMap.put("Is Active",new PoiConfig("isActive"));
+        columnMap.put("Registration Time",new PoiConfig("registrationTime","dd/yyyy/MM HH:mm:ss"));
+        columnMap.put("First Name",new PoiConfig("motherInfo:firstName"));
+        columnMap.put("Last kName",new PoiConfig("motherInfo:lastName"));
+        columnMap.put("Healthy",new PoiConfig("motherInfo:status:healthy"));
+        columnMap.put("Note",new PoiConfig("motherInfo:status:note"));
     }
     @BeforeClass
     public static void setUp() {
@@ -81,7 +82,7 @@ public class ExcelRowBeanMapperTests {
     }
 
     @Test(expected = ExcelRowBeanMapperException.class)
-    public void testByGeneratingEmptyRowException(){
+    public void testByRaisingEmptyRowException(){
         setSecondRowMapping();
         ExcelRowBeanMapper mapper = new ExcelRowBeanMapper.Builder().setRowMapping(columnMap).build();
         Sheet sheet = workbook.getSheetAt(0);
@@ -142,7 +143,7 @@ public class ExcelRowBeanMapperTests {
                 .setPath("src/test/resources/generated")
                 .build();
         Boolean isSuccess = excelSheetGenerator.generate("GeneratedExcel");
-//        System.out.println(isSuccess);
+        assertThat(isSuccess).isEqualTo(true);
     }
 
 
