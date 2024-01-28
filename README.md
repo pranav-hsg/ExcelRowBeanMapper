@@ -11,8 +11,11 @@ It is a lightweight library designed to convert Excel rows into Java beans, offe
 * [Usage](#usage)
   * [Mapping excel row to bean](#usage-mapping)
   * [Generating excel sheet with headers](#usage-generate-excel)
+* [Customizing Configuration](#cust-conf) 
+  * [PoiConfig](#cust-conf-poi)
+  * [PoiBuilderConfig](#cust-conf-build)
 * [Type Casting](#type-conversion)
-* [Customized Type Casting](#customized-type-conversion)
+* [Customizing Type Cast](#customized-type-conversion)
 * [License](#license)
 
 ## Getting Started <a name="gs"></a>
@@ -108,7 +111,7 @@ import com.poimapper.config.PoiConfig;
 import java.util.LinkedHashMap; 
 import java.util.Map;
 
-// Declare the column mapping.
+// Declare the column mapping note that order in which it was appended will map to order of cell.
 LinkedHashMap<String,PoiConfig> columnMap = new LinkedHashMap<>();
 // Default value is used when cell is empty
 columnMap.put("Name", new PoiConfig("name", null, "Beta"));
@@ -134,7 +137,47 @@ public class SimpleTestDto {
     }
 }
 ```
-**PoiConfig :** List of constructors
+
+### To generate excel sheet from excel mapping <a name="usage-generate-excel"></a>
+
+Based on passed column map, it uses key and based on what order item is pushed to map, headers are generated
+
+```java
+import com.poimapper.util.ExcelSheetGeneratorUtil;
+
+ExcelSheetGeneratorUtil excelSheetGenerator = new ExcelSheetGeneratorUtil
+                .Builder()
+                .setRowMapping(columnMap)
+                .setPath("src/test/resources/generated")
+                .build();
+Boolean isSuccess = excelSheetGenerator.generate("GeneratedExcel");
+```
+Sample Output: 
+
+| Name  | Birth Date | Amount |
+| ------------- |:-------------:|:-------------:|
+## Customizing configuration  <a name="cust-conf"></a>
+
+```java
+ExcelRowBeanMapper mapper = new ExcelRowBeanMapper.Builder()
+                .setRowMapping(columnMap) //  mandatory field which accepts LinkedHashMap<String,PoiConfig> row mapping which defines field related info. 
+                .setMapperSettings(new PoiBuilderConfig(false, true)) // Optional field that Accepts PoiBuilderConfig
+                .setDateFormat("dd/yyyy/MM") // Optional field that accepts date format pattern
+                .setDateTimeFormat("dd/yyyy/MM HH:mm:ss") // Optional field that accepts datetime format
+                .setCustomStringCastingFunc(customCastFunc) // Optional field that accepts custom cast.
+                .build();
+```
+
+| Method | Mandatory |     Expected Type      |     Default Value      |
+|--------|:---------:|:----------------------:|:----------------------:|
+| setRowMapping   |   true    |          LinkedHashMap<String, PoiConfig>          |          null          |
+| setMapperSettings   |   false   | PoiBuilderConfig | new PoiBuilderConfig() |
+| setDateFormat   |   false    |     String    |      "yyyy-MM-dd"      |
+| setDateTimeFormat   |   false    | String  | "yyyy-MM-dd HH:mm:ss"  |
+| setCustomStringCastingFunc   |   false    |   CastString    |   DefaultCastString    |
+
+### PoiConfig <a name="cust-conf-poi"></a>
+List of constructors
 
 ```java
 import com.poimapper.config.PoiConfig;
@@ -160,29 +203,22 @@ PoiConfig.builder()
 // pattern     : Pattern to override for date and time
 // defaultValue: Default value to use if Excel cell is empty
 ```
+### PoiBuilderConfig <a name="cust-conf-build"></a>
+List of constructors
 ```java
-ExcelRowBeanMapper mapper = new ExcelRowBeanMapper.Builder().setRowMapping(columnMap).build();
+import com.poimapper.config.PoiBuilderConfig;
+
+public PoiBuilderConfig();
+
+public PoiBuilderConfig(boolean suppressWarnings, boolean strictMode);
+
+// suppressWarning : whether to suppress warnings
+// strictMode : whether to throw error if failed to cast value / if field specified in rowMapping is not present 
 ```
-
-### To generate excel sheet from excel mapping <a name="usage-generate-excel"></a>
-
-Based on passed column map, it uses key and based on what order item is pushed to map, headers are generated
-
-```java
-import com.poimapper.util.ExcelSheetGeneratorUtil;
-
-ExcelSheetGeneratorUtil excelSheetGenerator = new ExcelSheetGeneratorUtil
-                .Builder()
-                .setRowMapping(columnMap)
-                .setPath("src/test/resources/generated")
-                .build();
-Boolean isSuccess = excelSheetGenerator.generate("GeneratedExcel");
-```
-Sample Output: 
-
-| Name  | Birth Date | Amount |
-| ------------- |:-------------:|:-------------:|
-
+| Field                      | Expected Type |     Default Value      |
+|----------------------------|:-------------:|:----------------------:|
+| suppressWarnings              |    boolean    |          true          |
+| strictMode          |    boolean    |           false         |
 ## Type casting <a name="type-conversion"></a>
 
 By default, the library automatically converts these types from the string type (extracted from the cell) to the corresponding field type of the bean.
